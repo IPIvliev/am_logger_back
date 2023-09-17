@@ -20,14 +20,17 @@ class AnswerSerializer(serializers.ModelSerializer):
     question = serializers.CharField(source='question.title')
     class Meta:
         model = Answer
-        fields = ['id', 'question', 'comment', 'answer', 'image', 'created_at']
+        fields = ['id', 'question', 'comment', 'answer', 'image', 'period_at', 'created_at']
 
 class ChecklistSerializer(serializers.ModelSerializer):
     report_title = serializers.ReadOnlyField(source='report_title.title')
     company_name = serializers.ReadOnlyField(source='company_title.name')
-    car_number = serializers.ReadOnlyField(source='car_title.number')
+    car_number = serializers.ReadOnlyField(source='car_number.number')
     answers = AnswerSerializer(read_only=True, many=True)
     
     class Meta:
         model = Checklist
         fields = ['id', 'report_title', 'company_name', 'car_number', 'answers', 'finish', 'created_at']
+
+    # def create(self, validated_data):
+    #     print("validated_data")

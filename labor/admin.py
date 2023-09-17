@@ -27,11 +27,12 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ('title', 'report')
     # inlines = [ReportInline]
 
-admin.site.register(Answer)
+# admin.site.register(Answer)
 
-# @admin.register(Answer)
-# class AnswerAdmin(admin.ModelAdmin):
-#     list_display = ('question', 'answer', 'created_at')
+@admin.register(Answer)
+class AnswerAdmin(admin.ModelAdmin):
+    # list_display = ('question', 'answer', 'created_at')
+    readonly_fields = ('created_at', 'updated_at')
 
 # class AnswerInLine(admin.TabularInline):
 #     model = Answer
@@ -39,5 +40,5 @@ admin.site.register(Answer)
 
 @admin.register(Checklist)
 class ChecklistAdmin(admin.ModelAdmin):
-    list_display = ('report_title', 'created_at', 'car_title', 'company_title')
+    list_display = ('report_title', 'created_at', 'car_number', 'company_title')
     # inlines = [AnswerInLine]
