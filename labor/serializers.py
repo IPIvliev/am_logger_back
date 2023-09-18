@@ -30,7 +30,7 @@ class ChecklistSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Checklist
-        fields = ['id', 'report_title', 'company_name', 'car_number', 'answers', 'finish', 'created_at']
+        fields = ['id', 'report_title', 'company_name', 'car_number', 'answers', 'finish', 'period', 'created_at']
 
     # def create(self, validated_data):
     #     print("validated_data")

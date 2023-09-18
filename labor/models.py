@@ -4,7 +4,7 @@ from django import forms
 from django.db import models
 from main.models import Car, Company
 
-
+DATE_INPUT_FORMATS = ['%d-%m-%Y']
 
 class Report(models.Model):
     title = models.CharField('Наименование отчёта', max_length=255)
@@ -68,6 +68,8 @@ class Checklist(models.Model):
     company_title = models.ForeignKey(Company, on_delete=models.CASCADE)
     car_number = models.ForeignKey(Car, null=True, blank=True, on_delete=models.CASCADE)
     finish = models.BooleanField('Сдан', null=False, blank=False, default=False)
+    period = models.DateField(null=True, blank=True, default=None)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
