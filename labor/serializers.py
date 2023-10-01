@@ -18,9 +18,10 @@ class ReportSerializer(serializers.ModelSerializer):
 
 class AnswerSerializer(serializers.ModelSerializer):
     question = serializers.CharField(source='question.title')
+    image = serializers.ImageField(required=False)
     class Meta:
         model = Answer
-        fields = ['id', 'question', 'comment', 'answer', 'image', 'period_at', 'created_at']
+        fields = ['id', 'question', 'comment', 'answer_result', 'image', 'period_at', 'created_at']
 
 class ChecklistSerializer(serializers.ModelSerializer):
     report_title = serializers.ReadOnlyField(source='report_title.title')
@@ -34,3 +35,5 @@ class ChecklistSerializer(serializers.ModelSerializer):
 
     # def create(self, validated_data):
     #     print("validated_data")
+    #     print(validated_data["answers"])
+    #     return Answer.objects.create(**validated_data)

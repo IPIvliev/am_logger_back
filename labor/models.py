@@ -41,7 +41,7 @@ def max_value_current_year(value):
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete = models.CASCADE)
     # checklist = models.ForeignKey(Checklist, on_delete = models.CASCADE, null=True, blank=True)
-    answer = models.BooleanField('Результат', null=False, blank=False, default=False)
+    answer_result = models.CharField('Результат', null=False, blank=False, default="Нет", max_length=50)
     comment = models.TextField('Комментарий', null=True, blank=True)
     image = models.ImageField('Фотография', upload_to='images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
