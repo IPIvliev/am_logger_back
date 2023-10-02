@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Report, Checklist, Answer, Question
-from .serializers import ReportSerializer, ChecklistSerializer
+from .serializers import ReportSerializer, ChecklistSerializer, AnswerSerializer
 from rest_framework import generics
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -9,6 +9,14 @@ from rest_framework import status
 class ReportList(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
+
+class AnswerUpdate(generics.UpdateAPIView):
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
+
+class ChecklistDestroy(generics.DestroyAPIView):
+    queryset = Checklist.objects.all()
+    serializer_class = ChecklistSerializer
 
 class ChecklistList(generics.ListCreateAPIView):
 
@@ -21,8 +29,8 @@ class ChecklistList(generics.ListCreateAPIView):
     
     def perform_create(self, serializer):
         # answers.clear()
-        print("peform_create")
-        print(self)
+        # print("peform_create")
+        # print(self)
         answers = []
         company_title_id = self.request.data.get('company_title_id')
         report_title_id = self.request.data.get('report_title_id')

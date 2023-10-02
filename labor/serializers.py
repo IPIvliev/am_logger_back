@@ -17,7 +17,7 @@ class ReportSerializer(serializers.ModelSerializer):
 
 
 class AnswerSerializer(serializers.ModelSerializer):
-    question = serializers.CharField(source='question.title')
+    question = serializers.CharField(source='question.title', read_only=True)
     image = serializers.ImageField(required=False)
     class Meta:
         model = Answer
