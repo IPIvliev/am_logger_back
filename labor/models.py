@@ -3,6 +3,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django import forms
 from django.db import models
 from main.models import Car, Company
+from django.dispatch import receiver
+from django.db.models.signals import pre_delete
 
 DATE_INPUT_FORMATS = ['%d-%m-%Y']
 
@@ -61,8 +63,14 @@ def year_choices():
 class MyForm(forms.ModelForm):
     year = forms.TypedChoiceField(coerce=int, choices=year_choices, initial=current_year)
 
+def delete_checklist(Checklist):
+    @receiver(pre_delete, sender=Checklist)
+    def dc(sender, instance, **kwargs):
+        for answer in instance.answers.all(): #for all users who are linked to the DB you're about to kill
+            answer.delete()
+
 class Checklist(models.Model):
-    report_title = models.ForeignKey(Report, on_delete=models.CASCADE)
+    report_title = models.ForeignKey(Report, on_delete=models.CASCADE, related_name='checklists')
     # question_title = models.ManyToManyField(Question)
     answers = models.ManyToManyField(Answer)
     company_title = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -78,7 +86,6 @@ class Checklist(models.Model):
         verbose_name_plural='Чеклисты'
         ordering = ['-created_at']
 
-
-
-
+delete_checklist(Checklist)
+    
 

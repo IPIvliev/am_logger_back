@@ -7,13 +7,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = ['id', 'title', 'comment']
 
-class ReportSerializer(serializers.ModelSerializer):
-    questions = QuestionSerializer(read_only=True, many=True)
-    # questions = serializers.ReadOnlyField(source='question.title')
-    # questions = serializers.RelatedField(source='question', read_only=True)
-    class Meta:
-        model = Report
-        fields = ['id', 'title', 'car_necessary', 'questions', 'comment', 'created_at']
+
 
 
 class AnswerSerializer(serializers.ModelSerializer):
@@ -33,7 +27,14 @@ class ChecklistSerializer(serializers.ModelSerializer):
         model = Checklist
         fields = ['id', 'report_title', 'company_name', 'car_number', 'answers', 'finish', 'period', 'created_at']
 
-    # def create(self, validated_data):
-    #     print("validated_data")
-    #     print(validated_data["answers"])
-    #     return Answer.objects.create(**validated_data)
+class ReportSerializer(serializers.ModelSerializer):
+    questions = QuestionSerializer(read_only=True, many=True)
+    finish_checklists = serializers.SerializerMethodField('count_checklists')
+    
+    def count_checklists(self, report):
+        amount = Checklist.objects.filter(finish=True).filter(report_title=report)
+        return len(amount)
+    
+    class Meta:
+        model = Report
+        fields = ['id', 'title', 'car_necessary', 'finish_checklists', 'questions', 'comment', 'created_at']

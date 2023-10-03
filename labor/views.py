@@ -18,6 +18,10 @@ class ChecklistDestroy(generics.DestroyAPIView):
     queryset = Checklist.objects.all()
     serializer_class = ChecklistSerializer
 
+class ChecklistUpdate(generics.UpdateAPIView):
+    queryset = Checklist.objects.all()
+    serializer_class = ChecklistSerializer
+
 class ChecklistList(generics.ListCreateAPIView):
 
     queryset = Checklist.objects.all()
@@ -48,15 +52,3 @@ class ChecklistList(generics.ListCreateAPIView):
 
         serializer.save(company_title_id = company_title_id, report_title_id = report_title_id, car_number_id = car_number_id, answers = answers)
         answers.clear()
-
-
-
-
-    # def post(self,request,pk,format=None):
-    #     serializer = self.serializer_class(data=request.data)
-    #     report = Report.objects.get(id=pk)
-    #     Checklist.objects.create()
-
-    #     print('Название: ' + report.title)
-    #     print(serializer)
-    #     return Response(ChecklistSerializer(report).data, status=status.HTTP_201_CREATED)
