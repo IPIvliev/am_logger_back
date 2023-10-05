@@ -32,23 +32,26 @@ class ChecklistList(generics.ListCreateAPIView):
         return Checklist.objects.filter(report_title=pk)
     
     def perform_create(self, serializer):
-        # answers.clear()
-        # print("peform_create")
-        # print(self)
+
+        request_dict = self.request.data.dict()
+
         answers = []
         company_title_id = self.request.data.get('company_title_id')
         report_title_id = self.request.data.get('report_title_id')
         car_number_id = self.request.data.get('car_number_id')
+
+        image_amount = len([value for key, value in request_dict.items() if '[image]' in key.lower()])
+        i = 0
+
         try: 
-            for answer in self.request.data.get('answers'):
-                print(answer)
-                print(answer)
-                question = Question.objects.get(title = answer['question'])
-                new_answer = Answer.objects.create(question = question, comment = answer['comment'], answer_result = answer['answer_result'], image = answer['image'])
+            while i < image_amount:
+                question = Question.objects.get(title = request_dict['answers['+str(i)+'][question]'])
+                new_answer = Answer.objects.create(question = question, comment = request_dict['answers['+str(i)+'][comment]'], 
+                                                   answer_result = request_dict['answers['+str(i)+'][answer_result]'], image = request_dict['answers['+str(i)+'][image]'])
                 answers.append(new_answer)
+                i += 1
         except:
             print("Error!!")
        
-
         serializer.save(company_title_id = company_title_id, report_title_id = report_title_id, car_number_id = car_number_id, answers = answers)
         answers.clear()

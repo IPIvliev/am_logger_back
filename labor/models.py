@@ -67,6 +67,10 @@ def delete_checklist(Checklist):
     @receiver(pre_delete, sender=Checklist)
     def dc(sender, instance, **kwargs):
         for answer in instance.answers.all(): #for all users who are linked to the DB you're about to kill
+            try:
+                answer.image.delete()
+            except:
+                pass
             answer.delete()
 
 class Checklist(models.Model):
