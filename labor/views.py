@@ -55,3 +55,7 @@ class ChecklistList(generics.ListCreateAPIView):
        
         serializer.save(company_title_id = company_title_id, report_title_id = report_title_id, car_number_id = car_number_id, answers = answers)
         answers.clear()
+
+class ChecklistAll(generics.ListCreateAPIView):
+    queryset = Checklist.objects.all()
+    serializer_class = ChecklistSerializer
