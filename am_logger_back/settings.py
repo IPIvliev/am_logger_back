@@ -106,9 +106,12 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "am_logger_db",
+        # "NAME": "j1228127",
         "USER": "razrus",
+        # "USER": "j1228127",
         "PASSWORD": "Huteras52",
         "HOST": "127.0.0.1",
+        # "HOST": "postgresql.j1228127.myjino.ru",
         "PORT": "5432",
     }
 }
