@@ -1,5 +1,6 @@
 from rest_framework import routers, serializers, viewsets
 from .models import Report, Checklist, Answer, Question
+from django.db.models import Q
 
 class QuestionSerializer(serializers.ModelSerializer):
     
@@ -38,3 +39,24 @@ class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
         fields = ['id', 'title', 'car_necessary', 'finish_checklists', 'questions', 'comment', 'created_at']
+
+class CustomListSerializer(serializers.ModelSerializer):
+    report_title = serializers.ReadOnlyField(source='report_title.title')
+    company_name = serializers.ReadOnlyField(source='company_title.name')
+    car_number = serializers.ReadOnlyField(source='car_number.number')
+    yes_answers_count = serializers.SerializerMethodField()
+    no_answers_count = serializers.SerializerMethodField()
+    empty_answers_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Checklist
+        fields = ['report_title', 'company_name', 'car_number', 'finish', 'yes_answers_count', 'no_answers_count', 'empty_answers_count', 'period', 'created_at']
+
+    def get_yes_answers_count(self, obj):
+        return obj.answers.filter(Q(answer_result='Да') | Q(answer_result='да')).count()
+
+    def get_no_answers_count(self, obj):
+        return obj.answers.filter(Q(answer_result='Нет') | Q(answer_result='нет')).count()
+    
+    def get_empty_answers_count(self, obj):
+        return obj.answers.filter(answer_result='').count()

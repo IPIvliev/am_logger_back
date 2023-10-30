@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from .models import Report, Checklist, Answer, Question
-from .serializers import ReportSerializer, ChecklistSerializer, AnswerSerializer
+from .serializers import ReportSerializer, ChecklistSerializer, AnswerSerializer, CustomListSerializer
 from rest_framework import generics
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.views import APIView
+from django.http import HttpResponse
+import json
 
 class ReportList(generics.ListAPIView):
     queryset = Report.objects.all()
@@ -59,3 +62,15 @@ class ChecklistList(generics.ListCreateAPIView):
 class ChecklistAll(generics.ListCreateAPIView):
     queryset = Checklist.objects.all()
     serializer_class = ChecklistSerializer
+
+class ChecklistCount(generics.ListAPIView):
+    queryset = Checklist.objects.all()
+    serializer_class = CustomListSerializer
+
+    # def get(self, request, format=None):
+    #     print("ddd")
+    #     checklists = [checklist.report_title for checklist in Checklist.objects.all()]
+    #     serializer = CustomListSerializer(checklists, many=True)
+    #     print("ddd: ", serializer)
+    #     # return checklists
+    #     return HttpResponse(json.dumps(serializer), mimetype="application/json")
