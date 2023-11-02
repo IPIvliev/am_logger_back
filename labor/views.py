@@ -1,13 +1,8 @@
 from django.shortcuts import render
-from .models import Report, Checklist, Answer, Question
-from .serializers import ReportSerializer, ChecklistSerializer, AnswerSerializer, CustomListSerializer
+from .models import Report, Checklist, Answer, Question, Statistic
+from .serializers import ReportSerializer, ChecklistSerializer, AnswerSerializer, CustomListSerializer, StatisticListSerializer
 from rest_framework import generics
-from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-from rest_framework import status
-from rest_framework.views import APIView
-from django.http import HttpResponse
-import json
+from django.db.models import Q
 
 class ReportList(generics.ListAPIView):
     queryset = Report.objects.all()
@@ -66,6 +61,18 @@ class ChecklistAll(generics.ListCreateAPIView):
 class ChecklistCount(generics.ListAPIView):
     queryset = Checklist.objects.all()
     serializer_class = CustomListSerializer
+
+class StatisticCount(generics.ListAPIView):
+    # queryset = Statistic.objects.all()
+    serializer_class = StatisticListSerializer
+
+    def get_queryset(self):
+        start_date = self.request.query_params.get('start_date')
+        end_date = self.request.query_params.get('end_date')
+        print('Start date: ', start_date)
+        queryset = Statistic.objects.filter(Q(period__gte=start_date), Q(period__lte=end_date))
+        # queryset = Statistic.objects.all()
+        return queryset
 
     # def get(self, request, format=None):
     #     print("ddd")

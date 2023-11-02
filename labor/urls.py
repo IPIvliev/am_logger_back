@@ -10,6 +10,7 @@ urlpatterns = [
     path('checklist/<int:pk>/update', views.ChecklistUpdate.as_view()),
     path('checklists/', views.ChecklistAll.as_view()),
     path('checklistscount/', views.ChecklistCount.as_view()),
+    path('statistic/', views.StatisticCount.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

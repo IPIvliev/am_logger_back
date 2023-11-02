@@ -5,6 +5,7 @@ from django.db import models
 from main.models import Car, Company
 from django.dispatch import receiver
 from django.db.models.signals import pre_delete
+from django.utils import timezone
 
 DATE_INPUT_FORMATS = ['%d-%m-%Y']
 
@@ -91,5 +92,18 @@ class Checklist(models.Model):
         ordering = ['-created_at']
 
 delete_checklist(Checklist)
-    
 
+class Statistic(models.Model):
+    report_title = models.ForeignKey(Report, on_delete=models.CASCADE, related_name='statistics')
+    company_title = models.ForeignKey(Company, on_delete=models.CASCADE)
+    yes_answers_count = models.IntegerField('Ответы ДА', null=True, blank=True, default=0)
+    no_answers_count = models.IntegerField('Ответы НЕТ', null=True, blank=True, default=0)
+    empty_answers_count = models.IntegerField('Ответы ПУСТО', null=True, blank=True, default=0)
+    period = models.DateField(default=timezone.now())
+
+    class Meta:
+        verbose_name='Статистический отчёт'
+        verbose_name_plural='Статистические отчёты'
+
+    def __str__(self):
+        return (self.report_title.title)

@@ -1,5 +1,5 @@
 from rest_framework import routers, serializers, viewsets
-from .models import Report, Checklist, Answer, Question
+from .models import Report, Checklist, Answer, Question, Statistic
 from django.db.models import Q
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -60,3 +60,11 @@ class CustomListSerializer(serializers.ModelSerializer):
     
     def get_empty_answers_count(self, obj):
         return obj.answers.filter(answer_result='').count()
+    
+class StatisticListSerializer(serializers.ModelSerializer):
+    report_title = serializers.ReadOnlyField(source='report_title.title')
+    company_name = serializers.ReadOnlyField(source='company_title.name')
+
+    class Meta:
+        model = Statistic
+        fields = ['report_title', 'company_name', 'yes_answers_count', 'no_answers_count', 'empty_answers_count', 'period']
