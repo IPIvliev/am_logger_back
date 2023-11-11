@@ -11,6 +11,7 @@ urlpatterns = [
     path('checklists/', views.ChecklistAll.as_view()),
     path('checklistscount/', views.ChecklistCount.as_view()),
     path('statistic/', views.StatisticCount.as_view()),
+    path('get_video', views.GetVideo.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

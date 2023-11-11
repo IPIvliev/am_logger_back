@@ -104,16 +104,16 @@ WSGI_APPLICATION = 'am_logger_back.wsgi.application'
 
 DATABASES = {
     "default": {
-        # "ENGINE": "django.db.backends.postgresql", #Локал
-        "ENGINE": "django.db.backends.mysql", # Jino
-        # "NAME": "am_logger_db", #Локал
-        "NAME": "j1228127_amlogger", # Jino
-        # "USER": "razrus", #Локал
-        "USER": "j1228127_razrus", # Jino
+        "ENGINE": "django.db.backends.postgresql", #Локал
+        # "ENGINE": "django.db.backends.mysql", # Jino
+        "NAME": "am_logger_db", #Локал
+        # "NAME": "j1228127_amlogger", # Jino
+        "USER": "razrus", #Локал
+        # "USER": "j1228127_razrus", # Jino
         "PASSWORD": "Huteras52", # Локал, Jino
         "HOST": "127.0.0.1", # Локал, Jino
-        "PORT": "3306",  # Jino
-        # "PORT": "5432", # Локал
+        "PORT": "5432", # Локал
+        # "PORT": "3306",  # Jino
     }
 }
 

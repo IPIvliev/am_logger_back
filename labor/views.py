@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from .models import Report, Checklist, Answer, Question, Statistic
-from .serializers import ReportSerializer, ChecklistSerializer, AnswerSerializer, CustomListSerializer, StatisticListSerializer
+from .serializers import ReportSerializer, ChecklistSerializer, AnswerSerializer, CustomListSerializer, StatisticListSerializer, NumberSerializer
 from rest_framework import generics
 from django.db.models import Q
+import cv2
+from django.http import HttpResponse
 
 class ReportList(generics.ListAPIView):
     queryset = Report.objects.all()
@@ -81,3 +83,22 @@ class StatisticCount(generics.ListAPIView):
     #     print("ddd: ", serializer)
     #     # return checklists
     #     return HttpResponse(json.dumps(serializer), mimetype="application/json")
+
+class GetVideo(generics.ListAPIView):
+    serializer_class = NumberSerializer
+
+    def get_queryset(self):
+        ip = self.request.query_params.get('camera')
+        vidcap = cv2.VideoCapture('http://' + ip + '/action/stream?subject=mjpeg&user=admin&pwd=admin')
+
+        success, image = vidcap.read()
+        if success:
+            # cv2.imwrite("frame%d.jpg" % count, image)
+            cv2.imwrite("media/usedVideo/frame%d.jpg" % 1, image)
+            # cv2.imwrite("frame%d.jpg" % 1, image)
+        cv2.destroyAllWindows()
+        vidcap.release()
+
+        queryset = [{'number': 'H 780 HT 152'}]
+
+        return queryset

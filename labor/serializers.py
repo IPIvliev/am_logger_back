@@ -68,3 +68,10 @@ class StatisticListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Statistic
         fields = ['report_title', 'company_name', 'yes_answers_count', 'no_answers_count', 'empty_answers_count', 'period']
+
+class NumberSerializer(serializers.Serializer):
+    number = serializers.CharField()
+
+    # class Meta:
+    #     model = Statistic
+    #     fields = ['report_title', 'company_name', 'yes_answers_count', 'no_answers_count', 'empty_answers_count', 'period']
