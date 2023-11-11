@@ -3,7 +3,7 @@ from .models import Report, Checklist, Answer, Question, Statistic
 from .serializers import ReportSerializer, ChecklistSerializer, AnswerSerializer, CustomListSerializer, StatisticListSerializer, NumberSerializer
 from rest_framework import generics
 from django.db.models import Q
-import cv2
+# import cv2
 from django.http import HttpResponse
 
 class ReportList(generics.ListAPIView):
@@ -89,16 +89,16 @@ class GetVideo(generics.ListAPIView):
 
     def get_queryset(self):
         ip = self.request.query_params.get('camera')
-        vidcap = cv2.VideoCapture('http://' + ip + '/action/stream?subject=mjpeg&user=admin&pwd=admin')
+        # vidcap = cv2.VideoCapture('http://' + ip + '/action/stream?subject=mjpeg&user=admin&pwd=admin')
 
-        success, image = vidcap.read()
-        if success:
-            # cv2.imwrite("frame%d.jpg" % count, image)
-            cv2.imwrite("media/usedVideo/frame%d.jpg" % 1, image)
-            # cv2.imwrite("frame%d.jpg" % 1, image)
-        cv2.destroyAllWindows()
-        vidcap.release()
+        # success, image = vidcap.read()
+        # if success:
+        #     # cv2.imwrite("frame%d.jpg" % count, image)
+        #     # cv2.imwrite("media/usedVideo/frame%d.jpg" % 1, image)
+        #     # cv2.imwrite("frame%d.jpg" % 1, image)
+        # # cv2.destroyAllWindows()
+        # vidcap.release()
 
-        queryset = [{'number': 'H 780 HT 152'}]
+        # queryset = [{'number': 'H 780 HT 152'}]
 
-        return queryset
+        # return queryset
