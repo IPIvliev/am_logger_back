@@ -14,6 +14,7 @@ class Report(models.Model):
     comment = models.TextField('Примечание', null=True, blank=True)
     # questions = models.ManyToManyField(Question)
     car_necessary = models.BooleanField('Добавить автомобиль', null=False, blank=False, default=False)
+    period_necessary = models.BooleanField('Добавить дату отчёта', null=False, blank=False, default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -77,7 +78,7 @@ def delete_checklist(Checklist):
 class Checklist(models.Model):
     report_title = models.ForeignKey(Report, on_delete=models.CASCADE, related_name='checklists')
     # question_title = models.ManyToManyField(Question)
-    answers = models.ManyToManyField(Answer)
+    answers = models.ManyToManyField(Answer, related_name='checklists')
     company_title = models.ForeignKey(Company, on_delete=models.CASCADE)
     car_number = models.ForeignKey(Car, null=True, blank=True, on_delete=models.CASCADE)
     finish = models.BooleanField('Сдан', null=False, blank=False, default=False)

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Report, Checklist, Answer, Question, Statistic
-from .serializers import ReportSerializer, ChecklistSerializer, AnswerSerializer, CustomListSerializer, StatisticListSerializer, NumberSerializer
+from .serializers import ReportSerializer, ChecklistSerializer, ShortChecklistSerializer, AnswerSerializer, CustomListSerializer, StatisticListSerializer, NumberSerializer
 from rest_framework import generics
 from django.db.models import Q
 # import cv2
@@ -11,7 +11,7 @@ class ReportList(generics.ListAPIView):
     serializer_class = ReportSerializer
 
 class AnswerUpdate(generics.UpdateAPIView):
-    queryset = Answer.objects.all()
+    queryset = Answer.objects.order_by("id")
     serializer_class = AnswerSerializer
 
 class ChecklistDestroy(generics.DestroyAPIView):
@@ -56,13 +56,28 @@ class ChecklistList(generics.ListCreateAPIView):
         serializer.save(company_title_id = company_title_id, report_title_id = report_title_id, car_number_id = car_number_id, answers = answers)
         answers.clear()
 
-class ChecklistAll(generics.ListCreateAPIView):
+class ChecklistAll(generics.ListAPIView):
+    # queryset = Checklist.objects.all().select_related('report_title', 'company_title', 'car_number').prefetch_related('answers').only(
+    #     'report_title__title', 'company_title__name', 'car_number__number', 'answers__id', 'answers__question', 'answers__comment',
+    #     'answers__answer_result', 'answers__image', 'answers__period_at', 'answers__created_at')
     queryset = Checklist.objects.all()
-    serializer_class = ChecklistSerializer
+    # def get_queryset(self, **kwargs):
+    #     return Checklist.objects.all()
+
+    serializer_class = ShortChecklistSerializer
+    # serializer_class = ChecklistSerializer
 
 class ChecklistCount(generics.ListAPIView):
     queryset = Checklist.objects.all()
     serializer_class = CustomListSerializer
+
+
+class AnswersList(generics.ListAPIView):
+    def get_queryset(self):
+        pk = self.kwargs['pk']
+        return Answer.objects.filter(checklists__id=pk)
+    
+    serializer_class = AnswerSerializer
 
 class StatisticCount(generics.ListAPIView):
     # queryset = Statistic.objects.all()

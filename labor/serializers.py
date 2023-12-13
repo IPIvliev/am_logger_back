@@ -8,15 +8,22 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = ['id', 'title', 'comment']
 
-
-
-
 class AnswerSerializer(serializers.ModelSerializer):
     question = serializers.CharField(source='question.title', read_only=True)
     image = serializers.ImageField(required=False)
     class Meta:
         model = Answer
         fields = ['id', 'question', 'comment', 'answer_result', 'image', 'period_at', 'created_at']
+
+class ShortChecklistSerializer(serializers.ModelSerializer):
+    report_title = serializers.ReadOnlyField(source='report_title.title')
+    company_name = serializers.ReadOnlyField(source='company_title.name')
+    car_number = serializers.ReadOnlyField(source='car_number.number')
+    # answers = AnswerSerializer(read_only=True, many=True)
+    
+    class Meta:
+        model = Checklist
+        fields = ['id', 'report_title', 'company_name', 'car_number', 'finish', 'period', 'created_at']
 
 class ChecklistSerializer(serializers.ModelSerializer):
     report_title = serializers.ReadOnlyField(source='report_title.title')
@@ -38,7 +45,7 @@ class ReportSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Report
-        fields = ['id', 'title', 'car_necessary', 'finish_checklists', 'questions', 'comment', 'created_at']
+        fields = ['id', 'title', 'car_necessary', 'period_necessary', 'finish_checklists', 'questions', 'comment', 'created_at']
 
 class CustomListSerializer(serializers.ModelSerializer):
     report_title = serializers.ReadOnlyField(source='report_title.title')
