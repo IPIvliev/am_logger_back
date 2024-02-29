@@ -11,6 +11,7 @@ class Appeal(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='N')
     comment = models.TextField('Комментарий', null=True, blank=True)
     kp_number = models.CharField('Номер контейнерной площадки', max_length=35, null=False, blank=False)
+    phone = models.CharField('Номер телефона заявителя', max_length=15, null=True, blank=True)
     image = models.ImageField('Фотография', upload_to='appeals/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -20,11 +21,11 @@ class Appeal(models.Model):
         verbose_name_plural='Обращения граждан'
 
     def image_tag(self):
-        return mark_safe('<img src="/media/%s" width="150" />' % (self.image))
+        return mark_safe('<img src="/public_html/media/%s" width="150" />' % (self.image))
 
     image_tag.short_description = 'Обзорное фото'
 
     def large_image_tag(self):
-        return mark_safe('<img src="/media/%s" width="480" />' % (self.image))
+        return mark_safe('<img src="/public_html/media/%s" width="480" />' % (self.image))
 
     large_image_tag.short_description = 'Обзорное фото'
