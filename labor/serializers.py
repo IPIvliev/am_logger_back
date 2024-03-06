@@ -36,6 +36,7 @@ class ChecklistSerializer(serializers.ModelSerializer):
         fields = ['id', 'report_title', 'company_name', 'car_number', 'answers', 'finish', 'period', 'created_at']
 
 class ReportSerializer(serializers.ModelSerializer):
+    group = serializers.ReadOnlyField(source='group.name')
     questions = QuestionSerializer(read_only=True, many=True)
     finish_checklists = serializers.SerializerMethodField('count_checklists')
     
@@ -45,7 +46,7 @@ class ReportSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Report
-        fields = ['id', 'title', 'car_necessary', 'period_necessary', 'finish_checklists', 'questions', 'comment', 'created_at']
+        fields = ['id', 'title', 'car_necessary', 'period_necessary', 'finish_checklists', 'questions', 'comment', 'created_at', 'group']
 
 class CustomListSerializer(serializers.ModelSerializer):
     report_title = serializers.ReadOnlyField(source='report_title.title')

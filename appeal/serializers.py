@@ -6,4 +6,4 @@ class AppealSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Appeal
-        fields = ['id', 'image', 'status', 'phone', 'kp_number', 'comment']
+        fields = ['id', 'image', 'status', 'phone', 'kp_number', 'comment', 'created_at']

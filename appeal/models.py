@@ -10,7 +10,7 @@ STATUS_CHOICES = (
 class Appeal(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='N')
     comment = models.TextField('Комментарий', null=True, blank=True)
-    kp_number = models.CharField('Номер контейнерной площадки', max_length=35, null=False, blank=False)
+    kp_number = models.CharField('Номер контейнерной площадки', max_length=50, null=False, blank=False)
     phone = models.CharField('Номер телефона заявителя', max_length=15, null=True, blank=True)
     image = models.ImageField('Фотография', upload_to='appeals/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

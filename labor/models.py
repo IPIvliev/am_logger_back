@@ -6,13 +6,14 @@ from main.models import Car, Company
 from django.dispatch import receiver
 from django.db.models.signals import pre_delete
 from django.utils import timezone
+from django.contrib.auth.models import Group
 
 DATE_INPUT_FORMATS = ['%d-%m-%Y']
 
 class Report(models.Model):
     title = models.CharField('Наименование отчёта', max_length=255)
     comment = models.TextField('Примечание', null=True, blank=True)
-    # questions = models.ManyToManyField(Question)
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete = models.DO_NOTHING)
     car_necessary = models.BooleanField('Добавить автомобиль', null=False, blank=False, default=False)
     period_necessary = models.BooleanField('Добавить дату отчёта', null=False, blank=False, default=False)
     created_at = models.DateTimeField(auto_now_add=True)
