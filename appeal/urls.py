@@ -4,6 +4,7 @@ from appeal import views
 
 urlpatterns = [
     path('appeals/', views.AppealList.as_view()),
+    path('botusers/', views.BotUserList.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
