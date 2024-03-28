@@ -24,3 +24,13 @@ class Car(models.Model):
 
     def __str__(self):
         return self.number
+    
+class Product(models.Model):
+    name = models.CharField('Наименование', null=False, blank=False, max_length=155)
+
+    class Meta:
+        verbose_name='Готовая продукция'
+        verbose_name_plural='Готовая продукция'
+
+    def __str__(self):
+        return self.name

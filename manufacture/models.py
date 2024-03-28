@@ -1,6 +1,7 @@
 from django.db import models
 # from datetime import datetime
 from django.utils import timezone
+from main.models import Product
 
 class Equipment(models.Model):
     name = models.CharField('Наименование', max_length=155)
@@ -41,3 +42,16 @@ class StopReport(models.Model):
 
     def __str__(self):
         return str(self.created_at)
+
+class Production(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='production')
+    weight = models.CharField('Вес', null=False, blank=False, max_length=30)
+    batch = models.CharField('Номер партии', null=False, blank=False, max_length=30)
+    created_at = models.DateTimeField('Дата производства', default=timezone.now)
+
+    class Meta:
+        verbose_name='Производство'
+        verbose_name_plural='Производство'
+
+    def __str__(self):
+        return str(self.batch)

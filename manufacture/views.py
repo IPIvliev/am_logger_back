@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .serializers import EquipmentSerializer, ParameterSerializer, StopReportSerializer
-from .models import Equipment, Parameter, StopReport
+from .serializers import EquipmentSerializer, ParameterSerializer, StopReportSerializer, ProductionSerializer
+from .models import Equipment, Parameter, StopReport, Production
 from django.db.models import Q
 from rest_framework import status
 from rest_framework.response import Response
@@ -41,7 +41,6 @@ def check_if_stop(value):
     timenow = timezone.localtime(timezone.now())
 
     last_stop_report = StopReport.objects.last()
-    print('Time now: ', timenow)
 
     PowerBagNull = Parameter.objects.filter(Q(created_at__year=timenow.year) & Q(created_at__month=timenow.month) & Q(created_at__day=timenow.day) & Q(created_at__hour=timenow.hour) & Q(created_at__minute=timenow.minute) & Q(value = 0) & (Q(name = 'PowerBAG1') | Q(name = 'PowerBAG2')))
     
@@ -55,6 +54,9 @@ def check_if_stop(value):
         last_stop_report.finished_at = datetime.now()
         last_stop_report.status = True
         last_stop_report.save()
+
+        if (last_stop_report.finished_at.replace(tzinfo=None) - last_stop_report.created_at.replace(tzinfo=None)).seconds-10800 < 300:
+            last_stop_report.delete()
     else:
         pass
 
@@ -87,3 +89,14 @@ class ParameterAdd(generics.CreateAPIView):
 class StopReportList(generics.ListAPIView):
     queryset = StopReport.objects.all().order_by("-created_at")
     serializer_class = StopReportSerializer
+
+class ProductionList(generics.ListAPIView):
+    serializer_class = ProductionSerializer
+
+    def get_queryset(self):
+        start_date = self.request.query_params.get('start_date')
+        end_date = self.request.query_params.get('end_date')
+
+        queryset = Production.objects.filter(Q(created_at__gte=start_date), Q(created_at__lte=end_date)).order_by("-created_at")
+
+        return queryset

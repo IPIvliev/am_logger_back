@@ -43,6 +43,10 @@ CSRF_TRUSTED_ORIGINS = ['http://*.mag-rf.ru', 'https://*.mag-rf.ru']
 # CSRF_COOKIE_SECURE = False
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+CRONJOBS = [
+    ('*/15 * * * *', 'manufacture.cron.cron_get_products')
+]
+
 # CORS_ALLOW_HEADERS = (
 #     "*",
 # )
@@ -58,6 +62,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework',
     'corsheaders',
+    'django_crontab',
     'main',
     'labor',
     'appeal',
