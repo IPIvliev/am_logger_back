@@ -5,7 +5,8 @@ from django.db.models import Q
 from rest_framework import status
 from rest_framework.response import Response
 import logging
-from datetime import datetime
+from itertools import chain
+from datetime import datetime, timedelta
 from django.utils import timezone, dateformat
 
 logger = logging.getLogger(__name__)
@@ -36,6 +37,37 @@ class AllParameterList(generics.ListAPIView):
         queryset = Parameter.objects.filter(Q(created_at__gte=start_date), Q(created_at__lte=end_date)).order_by("-created_at")
 
         return queryset
+    
+class LastParameterList(generics.ListAPIView):
+    serializer_class = ParameterSerializer
+
+    def get_queryset(self):
+        now = timezone.localtime(timezone.now())
+        minute_ago = now - timedelta(hours=0, minutes=1)
+
+        PowerBAG1 = Parameter.objects.filter(Q(created_at__gte=minute_ago) & Q(created_at__lte=now) & Q(name = 'PowerBAG1'))
+        PowerBAG1 = check_last_parameter(PowerBAG1)
+
+        PowerBAG2 = Parameter.objects.filter(Q(created_at__gte=minute_ago) & Q(created_at__lte=now) & Q(name = 'PowerBAG2'))
+        PowerBAG2 = check_last_parameter(PowerBAG2)
+
+        SensorBAG1 = Parameter.objects.filter(Q(created_at__gte=minute_ago) & Q(created_at__lte=now) & Q(name = 'SensorBAG1'))
+        SensorBAG1 = check_last_parameter(SensorBAG1)
+
+        SensorBAG2 = Parameter.objects.filter(Q(created_at__gte=minute_ago) & Q(created_at__lte=now) & Q(name = 'SensorBAG2'))
+        SensorBAG2 = check_last_parameter(SensorBAG2)
+
+        queryset = chain(PowerBAG1, PowerBAG2, SensorBAG1, SensorBAG2)
+
+        return queryset
+
+def check_last_parameter(object):
+    if ((object.count() > 1) | (object.count() < 1)):
+        equipment = Equipment.objects.get(id = 1)
+        object = [{'name': 'PowerBAG1', 'equipment': equipment, 'value' : 0, 'id' : 1, 'created_at' : timezone.localtime(timezone.now())}]
+        return object
+    else:
+        return object
 
 def check_if_stop(value):
     timenow = timezone.localtime(timezone.now())

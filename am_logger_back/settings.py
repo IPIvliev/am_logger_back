@@ -44,7 +44,12 @@ CSRF_TRUSTED_ORIGINS = ['http://*.mag-rf.ru', 'https://*.mag-rf.ru']
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CRONJOBS = [
-    ('*/15 * * * *', 'manufacture.cron.cron_get_products')
+    ('*/15 * * * *', 'manufacture.cron.cron_get_products'),
+    ('*/1 * * * *', 'django.core.management.call_command', ['check_cameras']),
+    ('30 9 * * *', 'django.core.management.call_command', ['get_emails']),
+    ('25 10 * * *', 'django.core.management.call_command', ['email_proccess']),
+    ('45 10 * * *', 'django.core.management.call_command', ['send_email_report']),
+    # ('15 11 * * 1', 'django.core.management.call_command', ['send_email_report_aa']),
 ]
 
 # CORS_ALLOW_HEADERS = (
@@ -63,10 +68,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_crontab',
+    'django_mailbox',
     'main',
     'labor',
     'appeal',
-    'manufacture'
+    'manufacture',
+    'polygon',
+    'detection',
 ]
 
 MIDDLEWARE = [
@@ -80,7 +88,21 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',  
 ]
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
 
+EMAIL_HOST = 'mx1.mag-rf.ru'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "info-vmpro@mag-rf.ru"
+# EMAIL_HOST_PASSWORD = "ms91EKM3twny4XQiF8Nk"
+EMAIL_HOST_PASSWORD = "AUUatYo3yu2"
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 ROOT_URLCONF = 'am_logger_back.urls'
 

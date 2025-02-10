@@ -1,12 +1,14 @@
 import requests
 from main.models import Product
 from manufacture.models import Production
+from django_mailbox.models import Mailbox
 import datetime
 
 def cron_get_products():
     date = str(datetime.date.today()).replace('-', '')
+    two_days_ago = str(datetime.date.today() - datetime.timedelta(days=2)).replace('-', '')
 
-    batchs = requests.get('http://virt43/svod-pol/hs/NewProgram/GeProductiontList/'+date+'/'+date,
+    batchs = requests.get('http://virt43/svod-pol/hs/NewProgram/GeProductiontList/'+two_days_ago+'/'+date,
                             headers = {'Authorization': 'Basic SVVTUjo='}).json()
     for item in batchs:
         product_name = item['Production']
@@ -20,3 +22,9 @@ def cron_get_products():
 
 
         # print(date, product_name, batch_weight, batch_number, bacth_creation_date, product[0])
+
+# def get_emails():
+#     mailboxes = Mailbox.active_mailboxes.all()
+
+#     for mailbox in mailboxes:
+#         messages = mailbox.get_new_mail()
